@@ -64,7 +64,8 @@ export default function AdminDashboard() {
     { path: "/admin/users", title: t.manageUsers, description: t.manageUsersDesc },
     { path: "/admin/categories", title: t.manageCategories, description: t.manageCategoriesDesc },
     { path: "/admin/delivery-areas", title: t.manageDeliveryAreas, description: t.manageDeliveryAreasDesc },
-    { path: "/admin/sell-requests", title: "Manage Sell Requests", description: "Manage user sell requests" }
+    { path: "/admin/sell-requests", title: "Manage Sell Requests", description: "Manage user sell requests" },
+    { path: "/admin/signature-dishes", title: "Manage Signature Dishes", description: "Manage your restaurant's signature dishes" }
   ];
 
   const sections = userType === "superadmin" ? superadminSections : adminSections;

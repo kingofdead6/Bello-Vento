@@ -21,6 +21,7 @@ import AdminGallery from "./Components/Admin/AdminGallery";
 
 import AdminSellRequests from "./Components/Admin/AdminSellRequests";
 import MenuPage from "./Pages/MenuPage";
+import AdminSignatureDishes from "./Components/Admin/AdminSignatureDishes";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/admin/orders" element={<AdminOrders />} />
           <Route path="/admin/gallery" element={<AdminGallery />} /> 
           <Route path="/admin/sell-requests" element={<AdminSellRequests />} />
+          <Route path="/admin/signature-dishes" element={<AdminSignatureDishes />} />
         </Route>
 
         {/* 404 Route */}

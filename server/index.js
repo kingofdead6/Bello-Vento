@@ -10,7 +10,7 @@ import deliveryAreaRoutes from './Routes/deliveryAreaRoutes.js';
 import orderRoutes from './Routes/orderRoutes.js';
 import galleryRoutes from './Routes/galleryRoutes.js';
 import sellRequestRoutes from './Routes/sellRequestRoutes.js';
-
+import signatureDishesRoutes from './Routes/SignatureDishesRoutes.js';
 dotenv.config();
 
 const app = express();
@@ -31,7 +31,7 @@ app.use('/api/delivery-areas', deliveryAreaRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/sell-requests', sellRequestRoutes);
-
+app.use('/api/signature-dishes', signatureDishesRoutes); 
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
