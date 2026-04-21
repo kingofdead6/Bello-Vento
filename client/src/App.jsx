@@ -22,11 +22,13 @@ import AdminMenu from "./Components/Admin/AdminMenu";
 import AdminTables from "./Components/Admin/AdminTables";
 import AdminReservations from "./Components/Admin/AdminReservation";
 import ReservationPage from "./Pages/ReservationPage";
+import ScrollToTopButton from "./Components/Shared/ScrollToTopButton";
 
 function App() {
   return (
     <Router>
       <ScrollToTop />
+      <ScrollToTopButton />
       <Navbar />
 
       <Routes>
