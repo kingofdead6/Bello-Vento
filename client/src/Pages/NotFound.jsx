@@ -1,72 +1,67 @@
 "use client";
 
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { LanguageContext } from "../Components/context/LanguageContext";
-import { translations } from "../../translations";
 
 export default function NotFound() {
-  const { lang } = useContext(LanguageContext);
-  const t = translations[lang]?.notFound || translations["fr"]?.notFound || {};
-  const isRTL = lang === "ar";
-
   return (
-    <div
-      className="min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 lg:px-12 bg-white text-center"
-      dir={isRTL ? "rtl" : "ltr"}
-    >
-      {/* Animated 404 Number */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-8xl sm:text-9xl lg:text-[12rem] font-light tracking-tighter text-stone-400 mb-6"
-      >
-        404
-      </motion.div>
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 bg-[#0c0a08] text-center text-stone-200 relative overflow-hidden">
 
-      {/* Main Message */}
-      <motion.h1
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.8 }}
-        className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-stone-950 mb-4"
-      >
-        {t.title || "Page Not Found"}
-      </motion.h1>
+      {/* Ambient glow background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-[#0c0a08] to-black opacity-90" />
+      <div className="absolute -top-40 w-[600px] h-[600px] bg-amber-500/10 blur-[140px] rounded-full" />
+      <div className="absolute bottom-0 w-[500px] h-[500px] bg-amber-400/10 blur-[160px] rounded-full" />
 
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.8 }}
-        className="text-lg sm:text-xl text-stone-600 max-w-2xl mb-10 leading-relaxed"
-      >
-        {t.message ||
-          "The page you're looking for doesn't exist or has been moved. Let's get you back to shopping!"}
-      </motion.p>
+      {/* Content */}
+      <div className="relative z-10">
 
-      {/* Back Button */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.8 }}
-      >
-        <Link
-          to="/products"
-          className="inline-flex items-center px-10 py-5 bg-stone-900 hover:bg-amber-800 text-white text-lg font-medium rounded-xl transition-all duration-300 shadow-md hover:shadow-lg active:scale-[0.98]"
+        {/* 404 */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-[7rem] sm:text-[10rem] md:text-[12rem] font-light tracking-tighter text-stone-600 leading-none"
         >
-          {t.backToCollection || "Back to Collection"}
-        </Link>
-      </motion.div>
+          404
+        </motion.div>
 
-      {/* Optional subtle decoration */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.1 }}
-        transition={{ delay: 1, duration: 1.5 }}
-        className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-amber-100/30 to-transparent pointer-events-none"
-      />
+        {/* Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-3xl sm:text-4xl md:text-5xl font-light tracking-wide mt-4"
+        >
+          Page Not Found
+        </motion.h1>
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="text-stone-400 text-base sm:text-lg max-w-xl mx-auto mt-5 leading-relaxed"
+        >
+          The page you are looking for does not exist, has been moved, or was removed.
+        </motion.p>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-10"
+        >
+          <Link
+            to="/"
+            className="inline-flex items-center px-10 py-4 bg-amber-500 text-black font-semibold rounded-2xl hover:bg-amber-400 transition shadow-lg"
+          >
+            Return Home
+          </Link>
+        </motion.div>
+
+      </div>
     </div>
   );
 }

@@ -131,26 +131,28 @@ export default function AdminReservations() {
           </div>
           <button
             onClick={fetchBookings}
-            className="flex items-center gap-2 text-stone-500 hover:text-amber-400 text-xs uppercase tracking-widest font-bold transition-colors"
+            className="cursor-pointer flex items-center gap-2 text-stone-500 hover:text-amber-400 text-xs uppercase tracking-widest font-bold transition-colors"
           >
             <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Refresh
           </button>
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex gap-2 mb-8 bg-white/5 p-1.5 rounded-2xl w-fit">
-          {["all", "pending", "confirmed", "cancelled"].map(f => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`px-5 py-2.5 rounded-xl text-xs uppercase tracking-widest font-bold transition-all duration-300 ${
-                filter === f ? "bg-amber-400 text-black shadow" : "text-stone-500 hover:text-white"
-              }`}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
+        <div className="flex flex-wrap gap-2 mb-8 bg-white/5 p-2 rounded-2xl w-full sm:w-fit overflow-x-auto sm:overflow-visible">
+  {["all", "pending", "confirmed", "cancelled"].map((f) => (
+    <button
+      key={f}
+      onClick={() => setFilter(f)}
+      className={`cursor-pointer px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[10px] sm:text-xs uppercase tracking-widest font-bold transition-all duration-300 whitespace-nowrap ${
+        filter === f
+          ? "bg-amber-400 text-black shadow"
+          : "text-stone-500 hover:text-white"
+      }`}
+    >
+      {f}
+    </button>
+  ))}
+</div>
 
         {/* Reservations List */}
         {loading && bookings.length === 0 ? (
@@ -170,7 +172,7 @@ export default function AdminReservations() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.97 }}
-                    className={`relative overflow-hidden rounded-[1.75rem] border transition-all duration-500 ${
+                    className={`relative overflow-hidden rounded-[1.75rem] -mr-10 border transition-all duration-500 ${
                       res.status === "pending"
                         ? "bg-[#181410]/80 border-amber-900/30"
                         : res.status === "confirmed"
@@ -216,8 +218,8 @@ export default function AdminReservations() {
                             <div className="text-stone-400 text-xs mt-1">{res.guests} Guests</div>
                           </InfoBlock>
 
-                          <InfoBlock label="Status">
-                            <span className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest ${styles.pill}`}>
+                          <InfoBlock label="Status"> 
+                            <span className={`text-[10px] px-2 py-1 rounded-full font-bold uppercase tracking-widest ${styles.pill}`}>
                               {res.status}
                             </span>
                           </InfoBlock>
@@ -242,13 +244,13 @@ export default function AdminReservations() {
                                 whileHover={{ scale: 1.03 }}
                                 whileTap={{ scale: 0.97 }}
                                 onClick={() => updateStatus(res._id, "confirmed")}
-                                className="bg-amber-400 hover:bg-amber-300 text-black px-7 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-amber-900/30 flex items-center gap-2"
+                                className="cursor-pointer bg-amber-400 hover:bg-amber-300 text-black px-7 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-amber-900/30 flex items-center gap-2"
                               >
                                 <Check size={14} /> Confirm
                               </motion.button>
                               <button
                                 onClick={() => updateStatus(res._id, "cancelled")}
-                                className="p-3.5 bg-red-500/10 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
+                                className="cursor-pointer p-3.5 bg-red-500/10 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all border border-red-500/20"
                                 title="Cancel"
                               >
                                 <X size={18} />
@@ -258,14 +260,14 @@ export default function AdminReservations() {
                           {res.status === "confirmed" && (
                             <button
                               onClick={() => updateStatus(res._id, "cancelled")}
-                              className="text-[10px] uppercase tracking-widest text-stone-600 hover:text-red-400 font-bold border border-stone-800 hover:border-red-900/50 px-5 py-3 rounded-full transition-all flex items-center gap-2"
+                              className="cursor-pointer text-[10px] uppercase tracking-widest text-stone-600 hover:text-red-400 font-bold border border-stone-800 hover:border-red-900/50 px-5 py-3 rounded-full transition-all flex items-center gap-2"
                             >
                               <X size={12} /> Cancel
                             </button>
                           )}
                           <button
                             onClick={() => deleteReservation(res._id)}
-                            className="p-3.5 text-stone-700 hover:text-red-500 transition-colors"
+                            className="cursor-pointer p-3.5 text-stone-700 hover:text-red-500 transition-colors"
                             title="Delete"
                           >
                             <Trash2 size={16} />
@@ -299,7 +301,7 @@ export default function AdminReservations() {
 function InfoBlock({ label, children }) {
   return (
     <div className="space-y-1.5">
-      <span className="text-[9px] uppercase tracking-[0.25em] text-amber-400/60 font-bold">{label}</span>
+      <span className="text-[9px] uppercase tracking-[0.25em] text-amber-400/60 font-bold">{label} : </span>
       {children}
     </div>
   );
