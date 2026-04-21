@@ -4,13 +4,11 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './Routes/authRoutes.js';
 import { errorHandler } from './Middleware/error.js';
-import productRoutes from './Routes/productRoutes.js';
 import categoryRoutes from './Routes/categoriesRoutes.js';
-import deliveryAreaRoutes from './Routes/deliveryAreaRoutes.js';
-import orderRoutes from './Routes/orderRoutes.js';
 import galleryRoutes from './Routes/galleryRoutes.js';
-import sellRequestRoutes from './Routes/sellRequestRoutes.js';
 import signatureDishesRoutes from './Routes/SignatureDishesRoutes.js';
+import menuRoutes from './Routes/menuRoutes.js';
+
 dotenv.config();
 
 const app = express();
@@ -25,13 +23,11 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('/api/delivery-areas', deliveryAreaRoutes);
-app.use('/api/orders', orderRoutes);
 app.use('/api/gallery', galleryRoutes);
-app.use('/api/sell-requests', sellRequestRoutes);
 app.use('/api/signature-dishes', signatureDishesRoutes); 
+app.use('/api/menu', menuRoutes);
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

@@ -1,11 +1,11 @@
-"use client";
-
+// src/pages/admin/AdminCategories.jsx
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { API_BASE_URL } from "../../../api";
 import { toast } from "react-toastify";
-import { Plus, Search, Trash2, X, Upload } from "lucide-react";
+import { Plus, Search, Trash2, X, Upload, ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function AdminCategories() {
   const [categories, setCategories] = useState([]);
@@ -19,8 +19,6 @@ export default function AdminCategories() {
   const [newCategoryDescription, setNewCategoryDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-
-  // New state for button loading
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
@@ -34,76 +32,65 @@ export default function AdminCategories() {
     setFilteredCategories(filtered);
   }, [categories, searchTerm]);
 
-  const fetchCategories = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-      const res = await axios.get(`${API_BASE_URL}/categories`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCategories(res.data);
-    } catch (err) {
-      toast.error("Erreur lors du chargement des catégories");
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchCategories = async () => {
+  setLoading(true);
+  try {
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedImage(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
-  };
+    const res = await axios.get(`${API_BASE_URL}/categories`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+
+    console.log("Fetched categories:", res.data); // 👈 ADD THIS
+    setCategories(res.data);
+
+  } catch (err) {
+    console.log("FETCH ERROR:", err.response?.data || err.message); // 👈 ADD THIS
+    toast.error("Failed to load categories");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
     if (!newCategoryName.trim()) {
-      return toast.error("Le nom de la catégorie est requis");
+      return toast.error("Category name is required");
     }
 
-    setIsCreating(true);   // ← Start loading state
+    setIsCreating(true);
 
     try {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
 
-      const formData = new FormData();
-      formData.append("name", newCategoryName.trim());
-      if (newCategoryDescription.trim()) {
-        formData.append("description", newCategoryDescription.trim());
-      }
-      if (selectedImage) {
-        formData.append("image", selectedImage);
-      }
+      const res = await axios.post(`${API_BASE_URL}/categories`,{ name: newCategoryName.trim() },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  }
+);
 
-      const res = await axios.post(`${API_BASE_URL}/categories`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+setCategories((prev) => [...prev, res.data]);
 
       setCategories([...categories, res.data]);
       resetForm();
       setShowAddModal(false);
-      toast.success("Catégorie ajoutée avec succès");
+      toast.success("Category created successfully");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Erreur lors de l'ajout de la catégorie");
+      toast.error(err.response?.data?.message || "Error creating category");
     } finally {
-      setIsCreating(false);   // ← Stop loading state (whether success or error)
+      setIsCreating(false);
     }
   };
 
   const resetForm = () => {
     setNewCategoryName("");
-    setNewCategoryDescription("");
-    setSelectedImage(null);
-    setImagePreview(null);
   };
 
   const handleDeleteCategory = async (id, name) => {
-    if (!window.confirm(`Supprimer la catégorie "${name}" ?`)) return;
+    if (!window.confirm(`Delete the category "${name}"?`)) return;
 
     try {
       const token = localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -111,232 +98,197 @@ export default function AdminCategories() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCategories(categories.filter(cat => cat._id !== id));
-      toast.success("Catégorie supprimée");
+      toast.success("Category deleted");
     } catch (err) {
-      toast.error(err.response?.data?.message || "Erreur lors de la suppression");
+      toast.error(err.response?.data?.message || "Error deleting category");
     }
   };
 
   return (
-    <>
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="min-h-screen py-8 px-4 mt-14"
-      >
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-10">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-stone-950">
-              Gestion des Catégories
-            </h1>
-            <p className="mt-4 text-lg text-stone-600">
-              Ajoutez, modifiez et gérez vos catégories avec images
-            </p>
-          </div>
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-screen py-20 pt-32 relative bg-gradient-to-b from-[#0c0a08] via-[#1a1612] to-[#0f0c0a] overflow-hidden"
+    >
+      {/* Subtle background texture */}
+      <div className="absolute inset-0 bg-[radial-gradient(#2a241f_0.8px,transparent_1px)] bg-[length:70px_70px] opacity-30 pointer-events-none" />
 
-          {/* Controls */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-10">
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="flex items-center justify-center gap-3 px-6 py-4 bg-stone-900 text-white font-medium rounded-2xl hover:bg-blue-700 transition"
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
+          <div>
+            <Link 
+              to="/admin" 
+              className="inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 text-sm tracking-widest uppercase font-light mb-4 transition-colors"
             >
-              <Plus size={24} />
-              Ajouter une catégorie
-            </button>
-
-            <div className="relative flex-1">
-              <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-500" />
-              <input
-                type="text"
-                placeholder="Rechercher une catégorie..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border border-stone-300 rounded-2xl focus:border-stone-900 outline-none"
-              />
-            </div>
+              <ArrowLeft size={18} />
+              Back to Control Center
+            </Link>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-5xl md:text-7xl font-serif tracking-wider text-white"
+            >
+              Categories
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="mt-4 text-2xl text-amber-100/70 font-light"
+            >
+              Define the chapters of your story.
+            </motion.p>
           </div>
 
-          {/* Categories Grid */}
-          {loading ? (
-            <div className="text-center py-20">
-              <p className="text-xl text-stone-500">Chargement...</p>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-4 bg-[#1a1612] border border-amber-900/40 hover:border-amber-400/50 px-8 py-5 rounded-3xl transition-all duration-300 group"
+          >
+            <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-amber-400/10 text-amber-400 group-hover:scale-110 transition-transform">
+              <Plus size={28} />
             </div>
-          ) : filteredCategories.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-2xl text-stone-400">Aucune catégorie trouvée</p>
+            <div>
+              <span className="block text-white text-lg font-light tracking-wide">New Category</span>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {filteredCategories.map((category) => (
-                <motion.div
-                  key={category._id}
-                  whileHover={{ y: -4 }}
-                  className="group bg-white rounded-3xl overflow-hidden border border-stone-200 hover:shadow-xl transition-all relative"
-                >
-                  {/* Image Container */}
-                  <div className="relative h-56 overflow-hidden bg-stone-100">
-                    {category.image?.url ? (
-                      <motion.img
-                        src={category.image.url}
-                        alt={category.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.6 }}
-                        onError={(e) => {
-                          e.target.src = "/placeholder.jpg";
-                          e.target.onerror = null;
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-stone-400 text-sm">
-                        Pas d'image disponible
-                      </div>
-                    )}
+          </button>
+        </div>
 
-                    <motion.div
-                      className="absolute inset-0 bg-black/20"
-                      whileHover={{ backgroundColor: "rgba(0, 0, 0, 0.35)" }}
-                      transition={{ duration: 0.3 }}
+        {/* Search Bar */}
+        <div className="relative max-w-xl mb-16">
+          <Search size={22} className="absolute left-6 top-1/2 -translate-y-1/2 text-amber-400/70" />
+          <input
+            type="text"
+            placeholder="Search categories..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-[#1a1612] border border-amber-900/30 focus:border-amber-400/50 pl-16 pr-6 py-5 rounded-3xl text-white placeholder-amber-100/40 outline-none text-lg"
+          />
+        </div>
+
+        {/* Categories Grid */}
+        {loading ? (
+          <div className="flex items-center justify-center h-96">
+            <p className="text-amber-100/70 text-xl font-light tracking-widest">Curating the collection...</p>
+          </div>
+        ) : filteredCategories.length === 0 ? (
+          <div className="text-center py-32">
+            <p className="text-2xl text-amber-100/50 font-light">No categories found.</p>
+            <p className="text-amber-100/40 mt-3">Create the first chapter.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {filteredCategories.map((category, index) => (
+              <motion.div
+                key={category._id}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.04 }}
+                whileHover={{ y: -8 }}
+                className="group relative bg-[#1a1612] border border-amber-900/30 rounded-3xl overflow-hidden"
+              >
+                <div className="p-6">
+                  <h3 className="text-2xl font-serif text-white tracking-wide mb-2">{category.name}</h3>
+                </div>
+                {/* Delete Button */}
+                <button
+                  onClick={() => handleDeleteCategory(category._id, category.name)}
+                  className="absolute top-6 right-6 p-3 bg-black/70 hover:bg-red-600 text-white rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-300"
+                >
+                  <Trash2 size={20} />
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* Closing poetic line */}
+        <motion.p 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="text-center mt-24 text-lg text-amber-100/60 tracking-wide max-w-md mx-auto"
+        >
+          Every category is a doorway to experience.
+        </motion.p>
+      </div>
+
+      {/* Add Category Modal - Dark & Elegant */}
+      <AnimatePresence>
+        {showAddModal && (
+          <motion.div
+            className="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 flex items-center justify-center p-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => { setShowAddModal(false); resetForm(); }}
+          >
+            <motion.div
+              className="bg-[#1a1612] border border-amber-900/50 rounded-3xl w-full max-w-lg overflow-hidden"
+              initial={{ scale: 0.95, y: 40, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.95, y: 40, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-10">
+                <div className="flex justify-between items-center mb-10">
+                  <h2 className="text-3xl font-serif text-white tracking-wide">New Category</h2>
+                  <button 
+                    onClick={() => { setShowAddModal(false); resetForm(); }} 
+                    className="text-amber-100/60 hover:text-white transition-colors"
+                  >
+                    <X size={32} />
+                  </button>
+                </div>
+
+                <form onSubmit={handleAddCategory} className="space-y-8">
+                  <div>
+                    <label className="block text-amber-100/70 text-sm tracking-widest mb-3">CATEGORY NAME</label>
+                    <input
+                      type="text"
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      className="w-full bg-transparent border border-amber-900/50 focus:border-amber-400 text-white px-6 py-5 rounded-2xl outline-none text-lg"
+                      placeholder="e.g. Signature Dishes"
+                      required
+                      disabled={isCreating}
                     />
                   </div>
 
-                  <div className="p-6">
-                    <h3 className="font-semibold text-lg text-stone-900">{category.name}</h3>
-                    {category.description && (
-                      <p className="text-sm text-stone-600 mt-2 line-clamp-2">{category.description}</p>
-                    )}
-                  </div>
-
-                  <button
-                    onClick={() => handleDeleteCategory(category._id, category.name)}
-                    className="absolute top-3 right-3 p-2 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition hover:bg-red-700"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Add Category Modal */}
-        <AnimatePresence>
-          {showAddModal && (
-            <motion.div
-              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => { setShowAddModal(false); resetForm(); }}
-            >
-              <motion.div
-                className="bg-white rounded-3xl shadow-2xl w-full max-w-lg"
-                initial={{ scale: 0.95, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.95, y: 20 }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className="p-8">
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-semibold">Nouvelle Catégorie</h2>
-                    <button 
-                      onClick={() => { setShowAddModal(false); resetForm(); }} 
-                      className="text-stone-400 hover:text-stone-600"
+                  <div className="flex gap-4 pt-6">
+                    <button
+                      type="button"
+                      onClick={() => { setShowAddModal(false); resetForm(); }}
+                      className="flex-1 py-5 border border-amber-900/50 text-amber-100/80 hover:text-white rounded-2xl font-light tracking-wider transition"
+                      disabled={isCreating}
                     >
-                      <X size={28} />
+                      Cancel
+                    </button>
+                    
+                    <button
+                      type="submit"
+                      disabled={isCreating || !newCategoryName.trim()}
+                      className="flex-1 py-5 bg-amber-400 hover:bg-amber-300 disabled:bg-amber-400/40 text-black font-light tracking-wider rounded-2xl transition flex items-center justify-center gap-3"
+                    >
+                      {isCreating ? (
+                        <>
+                          <span className="animate-spin h-5 w-5 border-2 border-black border-t-transparent rounded-full" />
+                          Creating...
+                        </>
+                      ) : (
+                        "Create Category"
+                      )}
                     </button>
                   </div>
-
-                  <form onSubmit={handleAddCategory} className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-stone-700 mb-2">Nom de la catégorie</label>
-                      <input
-                        type="text"
-                        value={newCategoryName}
-                        onChange={(e) => setNewCategoryName(e.target.value)}
-                        className="w-full px-5 py-4 border border-stone-300 rounded-2xl focus:border-stone-900 outline-none"
-                        placeholder="Ex: Coffres-forts"
-                        required
-                        disabled={isCreating}
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-stone-700 mb-2">Description (optionnel)</label>
-                      <textarea
-                        value={newCategoryDescription}
-                        onChange={(e) => setNewCategoryDescription(e.target.value)}
-                        className="w-full px-5 py-4 border border-stone-300 rounded-2xl focus:border-stone-900 outline-none h-24 resize-y"
-                        placeholder="Description de la catégorie..."
-                        disabled={isCreating}
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-stone-700 mb-3">Image de la catégorie</label>
-                      <div className="border-2 border-dashed border-stone-300 rounded-2xl p-8 text-center hover:border-stone-400 transition">
-                        <input
-                          type="file"
-                          onChange={handleImageChange}
-                          className="hidden"
-                          id="category-image"
-                          disabled={isCreating}
-                        />
-                        <label htmlFor="category-image" className="cursor-pointer flex flex-col items-center">
-                          <Upload size={40} className="text-stone-400 mb-3" />
-                          <span className="text-sm text-stone-600">Cliquez pour ajouter une image</span>
-                          <span className="text-xs text-stone-500 mt-1">(Recommandé: 800x600px)</span>
-                        </label>
-                      </div>
-
-                      {imagePreview && (
-                        <div className="mt-4 relative">
-                          <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover rounded-2xl" />
-                          <button
-                            type="button"
-                            onClick={() => { setSelectedImage(null); setImagePreview(null); }}
-                            className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full"
-                            disabled={isCreating}
-                          >
-                            <X size={16} />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex gap-4 pt-4">
-                      <button
-                        type="submit"
-                        className="flex-1 py-4 bg-stone-900 text-white rounded-2xl font-medium hover:bg-blue-700 transition disabled:bg-stone-400 flex items-center justify-center gap-2"
-                        disabled={isCreating || !newCategoryName.trim()}
-                      >
-                        {isCreating ? (
-                          <>
-                            <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
-                            Création en cours...
-                          </>
-                        ) : (
-                          "Créer la catégorie"
-                        )}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => { setShowAddModal(false); resetForm(); }}
-                        className="flex-1 py-4 border border-stone-300 rounded-2xl font-medium hover:bg-stone-100 transition"
-                        disabled={isCreating}
-                      >
-                        Annuler
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </motion.div>
+                </form>
+              </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.section>
-    </>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.section>
   );
 }

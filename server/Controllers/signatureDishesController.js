@@ -8,7 +8,7 @@ export const createSignatureDish = asyncHandler(async (req, res) => {
   // Validation
   if (!name || name.trim().length === 0) {
     res.status(400);
-    throw new Error("Le nom du plat signature est requis");
+    throw new Error("The name of the signature dish is required");
   }
 
   // Check if already exists
@@ -18,7 +18,7 @@ export const createSignatureDish = asyncHandler(async (req, res) => {
 
   if (dishExists) {
     res.status(400);
-    throw new Error("Ce plat signature existe déjà");
+    throw new Error("This signature dish already exists");
   }
 
   let imageUrl = null;
