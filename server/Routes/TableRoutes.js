@@ -4,7 +4,7 @@ import {
   getTables,
   deleteTable,
   checkAvailability
-} from '../controllers/tableController.js';
+} from '../Controllers/tableController.js';
 import { protect, admin } from '../Middleware/auth.js';
 
 const router = express.Router();

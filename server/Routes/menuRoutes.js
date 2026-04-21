@@ -5,7 +5,7 @@ import {
   getMenuItems, 
   deleteMenuItem, 
   toggleVisibility 
-} from '../controllers/MenuItemsController.js';
+} from '../Controllers/MenuItemsController.js';
 import multer from 'multer';
 
 const storage = multer.memoryStorage(); 
