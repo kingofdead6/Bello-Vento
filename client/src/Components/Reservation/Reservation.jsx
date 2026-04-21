@@ -81,12 +81,12 @@ export default function Reservation() {
   const maxDate = new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
 
   if (success) return (
-    <div className="min-h-screen bg-[#faf7f4] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#faf7f4]  flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, scale: 0.85, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: "spring", stiffness: 200, damping: 22 }}
-        className="text-center max-w-md"
+        className="text-center max-w-md "
       >
         <motion.div
           initial={{ scale: 0 }}
@@ -152,7 +152,7 @@ export default function Reservation() {
   );
 
   return (
-    <div className="bg-[#faf7f4] min-h-screen py-20 px-6 font-sans text-[#2d2a26]">
+    <div className="bg-[#faf7f4] min-h-screen py-30 px-6 font-sans text-[#2d2a26]">
       <div className="max-w-lg mx-auto">
 
         {/* Header */}
