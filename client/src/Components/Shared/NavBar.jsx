@@ -70,6 +70,8 @@ export default function Navbar() {
   const adminNavItems = [
     { name: "Dashboard", link: "/admin/dashboard" },
     { name: "Menu", link: "/admin/menu" },
+    { name: "Reservations", link: "/admin/reservations" },
+    { name: "Gallery", link: "/admin/gallery" },
   ];
 
   const superadminNavItems = [
@@ -77,6 +79,8 @@ export default function Navbar() {
     { name: "Categories", link: "/admin/categories" },
     { name: "Menu", link: "/admin/menu" },
     { name: "Users", link: "/admin/users" },
+    { name: "Reservations", link: "/admin/reservations" },
+    { name: "Tables", link: "/admin/tables" },
   ];
 
   const navItems =
@@ -140,9 +144,9 @@ export default function Navbar() {
             {isAdmin && (
               <button
                 onClick={handleLogout}
-                className="cursor-pointer px-5 py-2 text-sm font-medium text-stone-300 hover:text-amber-400 transition"
+                className="cursor-pointer px-5 py-2 text-sm font-medium text-stone-300 hover:text-red-400 transition"
               >
-                Déconnexion
+                Logout
               </button>
             )}
 
