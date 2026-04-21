@@ -4,7 +4,7 @@ import {
   createSignatureDish, 
   getSignatureDishes, 
   deleteSignatureDish 
-} from '../controllers/signatureDishesController.js';
+} from '../Controllers/signatureDishesController.js';
 
 import multer from 'multer';
 
