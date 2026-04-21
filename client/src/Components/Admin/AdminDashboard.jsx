@@ -81,7 +81,6 @@ export default function AdminDashboard() {
       title: "Manage Signature Dishes", 
       description: "Curate your restaurant's signature dishes" 
     },
-    
     {
       path: "/admin/tables",
       title: "Manage Tables",

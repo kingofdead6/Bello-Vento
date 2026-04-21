@@ -32,10 +32,31 @@ export default function ScrollToTopButton() {
           exit={{ opacity: 0, y: 20, scale: 0.9 }}
           transition={{ duration: 0.25 }}
           onClick={scrollToTop}
-          className=" fixed bottom-6 right-6 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-amber-500 text-black shadow-lg shadow-black/40 hover:bg-amber-400 transition cursor-pointer"
           aria-label="Scroll to top"
+          className="
+            fixed z-50
+            bottom-5 right-5
+            sm:bottom-6 sm:right-6
+
+            w-12 h-12 sm:w-14 sm:h-14
+            flex items-center justify-center
+
+            rounded-full
+            bg-amber-500 text-black
+            shadow-lg shadow-black/40
+
+            hover:bg-amber-400 active:scale-95
+            transition
+
+            cursor-pointer
+            select-none
+
+            /* prevents iOS bottom bar overlap */
+            pb-[env(safe-area-inset-bottom)]
+            mr-[env(safe-area-inset-right)]
+          "
         >
-          <ArrowUp size={20} />
+          <ArrowUp size={22} />
         </motion.button>
       )}
     </AnimatePresence>
