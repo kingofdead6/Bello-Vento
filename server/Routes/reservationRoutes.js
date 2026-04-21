@@ -1,7 +1,24 @@
 import express from 'express';
-const router = express.Router();
-import { createReservation, getReservations } from '../controllers/reservationController.js';
+import {
+  createReservation,
+  getReservations,
+  updateReservationStatus,
+  deleteReservation
+} from '../controllers/reservationController.js';
+import { protect, admin } from '../Middleware/auth.js';
 
-router.route('/').post(createReservation).get(getReservations);
+const router = express.Router();
+
+// Public: Guest creates a reservation
+router.post('/', createReservation);
+
+// Admin: View all reservations
+router.get('/', protect, admin, getReservations);
+
+// Admin: Confirm or cancel
+router.patch('/:id/status', protect, admin, updateReservationStatus);
+
+// Admin: Hard delete
+router.delete('/:id', protect, admin, deleteReservation);
 
 export default router;

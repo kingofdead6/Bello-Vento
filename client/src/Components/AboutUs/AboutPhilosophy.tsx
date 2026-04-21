@@ -11,7 +11,7 @@ const philosophyPoints = [
 
 export default function AboutPhilosophy() {
   return (
-    <section className=" bg-[#0a0806]">
+    <section className=" relative pt-28 md:pt-40">
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-16">
           <div className="text-amber-400 text-sm tracking-[4px] uppercase mb-4">Our Philosophy</div>

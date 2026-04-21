@@ -75,7 +75,7 @@ export default function Hero() {
             className="mt-16 flex flex-col sm:flex-row gap-5 justify-center"
           >
             <Link
-              to="/reservations"
+              to="/reservation"
               className="group px-10 py-5 bg-gold text-black bg-white/35 font-medium text-lg rounded-xl hover:bg-amber-200 transition-all duration-300 flex items-center justify-center gap-2"
             >
               Reserve a Table

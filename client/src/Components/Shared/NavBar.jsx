@@ -1,13 +1,16 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingCartIcon, XMarkIcon, Bars3Icon } from "@heroicons/react/24/outline";
+import { XMarkIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { jwtDecode } from "jwt-decode";
-import Logo from "../../assets/Logo.png"; 
+import Logo from "../../assets/Logo.png";
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userType, setUserType] = useState(null);
-  const [cartCount, setCartCount] = useState(0);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -18,7 +21,10 @@ export default function Navbar() {
 
   // Check auth status
   const checkAuth = () => {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    const token =
+      localStorage.getItem("token") ||
+      sessionStorage.getItem("token");
+
     if (token) {
       try {
         const decoded = jwtDecode(token);
@@ -31,13 +37,10 @@ export default function Navbar() {
     }
   };
 
-
   useEffect(() => {
     checkAuth();
 
-    const handleChange = () => {
-      checkAuth();
-    };
+    const handleChange = () => checkAuth();
 
     window.addEventListener("storage", handleChange);
     window.addEventListener("authChanged", handleChange);
@@ -56,7 +59,7 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  // Navigation for regular users
+  // Navigation
   const normalNavItems = [
     { name: "Home", link: "/" },
     { name: "About", link: "/about" },
@@ -64,7 +67,6 @@ export default function Navbar() {
     { name: "Reservation", link: "/reservation" },
   ];
 
-  // Admin navigation (kept as is)
   const adminNavItems = [
     { name: "Dashboard", link: "/admin/dashboard" },
     { name: "Menu", link: "/admin/menu" },
@@ -90,10 +92,10 @@ export default function Navbar() {
     <>
       <nav className="fixed top-0 left-0 w-full z-50">
         <div
-          className={`max-w-7xl mx-auto px-6 py-5 flex items-center justify-between backdrop-blur-xl transition-all duration-300 shadow-lg rounded-b-3xl ${
+          className={`max-w-7xl mx-auto px-6 py-5 flex items-center justify-between backdrop-blur-2xl transition-all duration-300 shadow-lg rounded-b-3xl border-b border-stone-800 ${
             isAdmin
-              ? "bg-[#ffffff]/95 text-stone-800 border-b border-stone-300"
-              : "bg-white text-stone-800 border-b border-stone-100"
+              ? "bg-[#0c0a08]/95 text-stone-200"
+              : "bg-[#0c0a08]/90 text-stone-200"
           }`}
         >
           {/* Logo */}
@@ -103,11 +105,7 @@ export default function Navbar() {
             transition={{ duration: 0.5 }}
           >
             <Link to="/">
-              <img
-                src={Logo}   // Make sure path is correct
-                alt="Logo"
-                className="h-12 w-auto"
-              />
+              <img src={Logo} alt="Logo" className="h-12 w-auto" />
             </Link>
           </motion.div>
 
@@ -115,6 +113,7 @@ export default function Navbar() {
           <ul className="hidden md:flex items-center gap-10 font-medium text-lg">
             {navItems.map((item, i) => {
               const isActive = location.pathname === item.link;
+
               return (
                 <motion.li
                   key={i}
@@ -123,10 +122,10 @@ export default function Navbar() {
                 >
                   <Link
                     to={item.link}
-                    className={`pb-1 transition-all duration-200 ${
+                    className={`pb-1 transition-all duration-300 ${
                       isActive
-                        ? "text-blue-700 border-b-2 border-blue-700 font-semibold"
-                        : "hover:text-blue-700"
+                        ? "text-amber-400 border-b-2 border-amber-400 font-semibold"
+                        : "text-stone-300 hover:text-amber-400"
                     }`}
                   >
                     {item.name}
@@ -138,23 +137,10 @@ export default function Navbar() {
 
           {/* Right Side */}
           <div className="flex items-center gap-6">
-            {/* Cart Icon - Only for customers */}
-            {!isAdmin && (
-              <Link to="/cart" className="relative group">
-                <ShoppingCartIcon className="w-8 h-8 text-stone-700 group-hover:text-blue-700 transition" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-blue-700 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow">
-                    {cartCount}
-                  </span>
-                )}
-              </Link>
-            )}
-            
-
             {isAdmin && (
               <button
                 onClick={handleLogout}
-                className="cursor-pointer px-5 py-2 text-sm font-medium hover:text-blue-700 transition"
+                className="cursor-pointer px-5 py-2 text-sm font-medium text-stone-300 hover:text-amber-400 transition"
               >
                 Déconnexion
               </button>
@@ -163,9 +149,13 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden text-3xl text-stone-700"
+              className="md:hidden text-3xl text-stone-300"
             >
-              {menuOpen ? <XMarkIcon className="w-8 h-8" /> : <Bars3Icon className="w-8 h-8" />}
+              {menuOpen ? (
+                <XMarkIcon className="w-8 h-8" />
+              ) : (
+                <Bars3Icon className="w-8 h-8" />
+              )}
             </button>
           </div>
         </div>
@@ -175,7 +165,7 @@ export default function Navbar() {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="md:hidden bg-white border-t shadow-xl px-6 py-8"
+            className="md:hidden bg-[#0c0a08] border-t border-stone-800 shadow-xl px-6 py-8"
           >
             <ul className="space-y-6 text-xl font-medium">
               {navItems.map((item, i) => (
@@ -183,8 +173,10 @@ export default function Navbar() {
                   <Link
                     to={item.link}
                     onClick={() => setMenuOpen(false)}
-                    className={`block py-2 ${
-                      location.pathname === item.link ? "text-blue-700 font-semibold" : "text-stone-700"
+                    className={`block py-2 transition ${
+                      location.pathname === item.link
+                        ? "text-amber-400 font-semibold"
+                        : "text-stone-300 hover:text-amber-400"
                     }`}
                   >
                     {item.name}
@@ -196,7 +188,7 @@ export default function Navbar() {
         )}
       </nav>
 
-      {/* Spacer to prevent content overlap */}
+      {/* Spacer */}
       <div className="h-20"></div>
     </>
   );

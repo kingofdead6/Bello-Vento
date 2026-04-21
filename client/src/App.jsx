@@ -19,8 +19,9 @@ import AdminGallery from "./Components/Admin/AdminGallery";
 import MenuPage from "./Pages/MenuPage";
 import AdminSignatureDishes from "./Components/Admin/AdminSignatureDishes";
 import AdminMenu from "./Components/Admin/AdminMenu";
-import ReservationPage from "./Pages/Reservation";
 import AdminTables from "./Components/Admin/AdminTables";
+import AdminReservations from "./Components/Admin/AdminReservation";
+import ReservationPage from "./Pages/ReservationPage";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/admin/signature-dishes" element={<AdminSignatureDishes />} />
           <Route path="/admin/menu" element={<AdminMenu />} />
           <Route path="/admin/tables" element={<AdminTables />} />
+          <Route path="/admin/reservations" element={<AdminReservations/>} />
         </Route>
 
         {/* 404 Route */}

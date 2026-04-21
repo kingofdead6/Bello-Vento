@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import chefpic from "../../assets/about/Maincheff.png";
 export default function AboutChef() {
   return (
-    <section className="relative py-28 md:py-40 bg-gradient-to-b from-[#0a0806] to-[#12100c]">
+    <section className="relative py-28 md:py-40">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid lg:grid-cols-12 gap-16 lg:gap-20 items-center">
 

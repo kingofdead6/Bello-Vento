@@ -61,7 +61,7 @@ export default function Menu() {
   }
 
   return (
-    <div className=" min-h-screen text-white selection:bg-amber-400/30">
+    <div className=" min-h-screen text-white pb-20">
       {/* Hero Header */}
       <section className="relative h-[25vh] flex items-center justify-center overflow-hidden border-b border-amber-900/10">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>

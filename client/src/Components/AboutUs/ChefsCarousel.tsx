@@ -64,7 +64,7 @@ export default function ChefsCarousel() {
   };
 
   return (
-    <section className="relative bg-[#0a0806]  overflow-hidden">
+    <section className="relative   overflow-hidden">
       {/* Background texture */}
       <div className="absolute inset-0 bg-[radial-gradient(#2a241f_0.6px,transparent_1px)] bg-[length:60px_60px] opacity-30" />
 
