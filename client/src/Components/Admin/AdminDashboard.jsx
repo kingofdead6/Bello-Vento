@@ -56,7 +56,12 @@ export default function AdminDashboard() {
       path: "/admin/menu", 
       title: "Manage Menu", 
       description: "Edit and organize your menu items" 
-    }
+    },
+    {
+      path: "/admin/reservations",
+      title: "Manage Reservations",
+      description: "View and manage customer reservations"
+    },
   ];
 
   const superadminSections = [
@@ -75,6 +80,12 @@ export default function AdminDashboard() {
       path: "/admin/signature-dishes", 
       title: "Manage Signature Dishes", 
       description: "Curate your restaurant's signature dishes" 
+    },
+    
+    {
+      path: "/admin/tables",
+      title: "Manage Tables",
+      description: "View and manage your restaurant's tables"
     }
   ];
 

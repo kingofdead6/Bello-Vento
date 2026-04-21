@@ -19,6 +19,8 @@ import AdminGallery from "./Components/Admin/AdminGallery";
 import MenuPage from "./Pages/MenuPage";
 import AdminSignatureDishes from "./Components/Admin/AdminSignatureDishes";
 import AdminMenu from "./Components/Admin/AdminMenu";
+import ReservationPage from "./Pages/Reservation";
+import AdminTables from "./Components/Admin/AdminTables";
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/about" element={<Aboutus />} />
+        <Route path="/reservation" element={<ReservationPage />} />
         <Route path="/login" element={<Login />} />
 
         {/* Protected Admin Routes */}
@@ -41,6 +44,7 @@ function App() {
           <Route path="/admin/gallery" element={<AdminGallery />} /> 
           <Route path="/admin/signature-dishes" element={<AdminSignatureDishes />} />
           <Route path="/admin/menu" element={<AdminMenu />} />
+          <Route path="/admin/tables" element={<AdminTables />} />
         </Route>
 
         {/* 404 Route */}

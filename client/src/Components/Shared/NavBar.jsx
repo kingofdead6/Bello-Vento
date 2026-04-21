@@ -1,10 +1,9 @@
-// src/components/Navbar.jsx
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShoppingCartIcon, XMarkIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import { jwtDecode } from "jwt-decode";
-import Logo from "../../assets/Logo.png"; // Adjust path as needed
+import Logo from "../../assets/Logo.png"; 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userType, setUserType] = useState(null);
@@ -32,30 +31,20 @@ export default function Navbar() {
     }
   };
 
-  // Update cart count
-  const updateCartCount = () => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const total = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
-    setCartCount(total);
-  };
 
   useEffect(() => {
     checkAuth();
-    updateCartCount();
 
     const handleChange = () => {
       checkAuth();
-      updateCartCount();
     };
 
     window.addEventListener("storage", handleChange);
     window.addEventListener("authChanged", handleChange);
-    window.addEventListener("cartUpdated", updateCartCount);
 
     return () => {
       window.removeEventListener("storage", handleChange);
       window.removeEventListener("authChanged", handleChange);
-      window.removeEventListener("cartUpdated", updateCartCount);
     };
   }, []);
 
@@ -69,26 +58,23 @@ export default function Navbar() {
 
   // Navigation for regular users
   const normalNavItems = [
-    { name: "Accueil", link: "/" },
-    { name: "À propos", link: "/about" },
-    { name: "Produits", link: "/products" },
-    { name: "Contact", link: "/sell-us-something" },
+    { name: "Home", link: "/" },
+    { name: "About", link: "/about" },
+    { name: "Menu", link: "/menu" },
+    { name: "Reservation", link: "/reservation" },
   ];
 
   // Admin navigation (kept as is)
   const adminNavItems = [
     { name: "Dashboard", link: "/admin/dashboard" },
-    { name: "Commandes", link: "/admin/orders" },
-    { name: "Produits", link: "/admin/products" },
+    { name: "Menu", link: "/admin/menu" },
   ];
 
   const superadminNavItems = [
     { name: "Dashboard", link: "/admin/dashboard" },
-    { name: "Commandes", link: "/admin/orders" },
-    { name: "Produits", link: "/admin/products" },
-    { name: "Catégories", link: "/admin/categories" },
-    { name: "Livraison", link: "/admin/delivery-areas" },
-    { name: "Utilisateurs", link: "/admin/users" },
+    { name: "Categories", link: "/admin/categories" },
+    { name: "Menu", link: "/admin/menu" },
+    { name: "Users", link: "/admin/users" },
   ];
 
   const navItems =
