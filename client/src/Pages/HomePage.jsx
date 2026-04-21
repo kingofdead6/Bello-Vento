@@ -22,15 +22,13 @@ const HomePage = () => {
 
   return (
     <div className="-mt-20 relative">
-      {/* 🔥 INTRO VIDEO OVERLAY */}
-      {/* 🔥 INTRO VIDEO OVERLAY */}
 {showIntro && (
   <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
     
     {/* Skip Button */}
     <button
       onClick={() => setShowIntro(false)}
-      className="absolute top-6 right-6 z-50 px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition"
+      className="cursor-pointer absolute top-6 right-6 z-50 px-4 py-2 bg-white text-black rounded-full font-medium hover:bg-gray-200 transition"
     >
       Skip
     </button>
